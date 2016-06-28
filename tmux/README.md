@@ -4,5 +4,5 @@
 
 * [.tmux.conf](.tmux.conf)
 
-* [新しい窓を開いてSSH接続するスクリプト](nwssh.pl)
+* [新しい窓を開いてSSH接続するスクリプト](../scripts/nwssh.pl)
 
