@@ -2,8 +2,6 @@
 
 * [.tmux.conf](.tmux.conf)
 
-* [新しい窓を開いてSSH接続するスクリプト](../scripts/nwssh.pl)
-
 # インストール
 
 OSW(Homebrew)
