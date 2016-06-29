@@ -1,0 +1,85 @@
+#!/usr/bin/env perl
+use feature 'say';
+use strict;
+use warnings;
+
+use constant WAIT => 1;
+
+my $ssh_agent      = '/usr/bin/ssh-agent';
+my $ssh_agent_info = "$ENV{HOME}/.ssh/ssh-agent-info";
+
+my $muxer = $ARGV[0] || '';
+
+my %cmd_mux=();
+
+# ssh-agent が動いてなければ起動して $cmd_mux{start} を実行する
+# ssh-agent が動いていれば 環境変数を読み込んだ後 $cmd_mux{attach} を実行する
+
+if($muxer eq 'screen') {
+	$cmd_mux{start} =['screen'];
+	$cmd_mux{attach}=['screen','-D','-RR'];
+
+} elsif($muxer eq 'tmux') {
+	$cmd_mux{start} =['tmux'];
+	$cmd_mux{attach}=['tmux','a'];
+
+} else {
+	usage();
+}
+
+read_ssh_agent_info() if(-e $ssh_agent_info);
+
+unless($ENV{SSH_AGENT_PID}) {
+	say "start ssh-agent";
+	sleep(WAIT);
+	my $sao=`$ssh_agent`;
+	if($sao=~/SSH_AUTH_SOCK=([^;]+);/s) { $ENV{SSH_AUTH_SOCK}=$1 }
+	if($sao=~/SSH_AGENT_PID=([^;]+);/s) { $ENV{SSH_AGENT_PID}=$1 }
+	{
+		open(my $fh,'>',$ssh_agent_info) || die $!;
+		print $fh "SSH_AUTH_SOCK $ENV{SSH_AUTH_SOCK}\n";
+		print $fh "SSH_AGENT_PID $ENV{SSH_AGENT_PID}\n";
+	}
+	chmod(0600,$ssh_agent_info);
+	say "save ssh-agent-info";
+	sleep(WAIT);
+	say "save $muxer";
+	exec(@{$cmd_mux{start}});
+
+} else {
+	say "attach $muxer";
+	sleep(WAIT);
+	exec(@{$cmd_mux{attach}});
+}
+
+sub read_ssh_agent_info {
+	{
+		open(my $fh,'<',$ssh_agent_info) || die $!;
+		foreach(<$fh>) {
+			if(/^SSH_AUTH_SOCK (.+)$/) { $ENV{SSH_AUTH_SOCK}=$1 }
+			if(/^SSH_AGENT_PID (.+)$/) { $ENV{SSH_AGENT_PID}=$1 }
+		}
+	}
+	# プロセスを検索してなかったら消す
+	say "search $ENV{SSH_AGENT_PID}";
+	unless( search_process() ) {
+		say "remove ssh-agent-info";
+		unlink($ssh_agent_info);
+		delete($ENV{SSH_AGENT_SOCK});
+		delete($ENV{SSH_AGENT_PID});
+	}
+}
+
+sub search_process {
+	my $proc=`ps -eo pid`;
+#	say $proc;
+	return ($proc=~/^\s*$ENV{SSH_AGENT_PID}\s/m) ? 1 : 0;
+}
+
+sub usage {
+	say "USAGE: $0 [ screen | tmux ]";
+	say "wainting 10 seconds...";
+	sleep(10);
+	exit(255);
+}
+
