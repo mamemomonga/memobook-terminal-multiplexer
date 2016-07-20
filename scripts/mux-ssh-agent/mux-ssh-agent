@@ -43,14 +43,26 @@ unless($ENV{SSH_AGENT_PID}) {
 	chmod(0600,$ssh_agent_info);
 	say "save ssh-agent-info";
 	sleep(WAIT);
-	say "save $muxer";
-	exec(@{$cmd_mux{start}});
+}
+
+if($muxer eq 'tmux') {
+	my $tml=`tmux ls 2>/dev/null`;
+	if($tml eq "") {
+		say "start $muxer";
+		sleep(WAIT);
+		exec(@{$cmd_mux{start}});
+	} else {
+		say "attach $muxer";
+		sleep(WAIT);
+		exec(@{$cmd_mux{attach}});
+	}
 
 } else {
 	say "attach $muxer";
 	sleep(WAIT);
 	exec(@{$cmd_mux{attach}});
 }
+
 
 sub read_ssh_agent_info {
 	{

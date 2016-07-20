@@ -25,8 +25,3 @@ ssh をつかって起動する場合は -t オプションが必要
 	$ ssh -t USER@REMOTE /home/USER/bin/mux-ssh-agent screen
 
 alias か exec をつかったシンプルなコマンドを用意しておくとよい
-
-## 問題点
-
-tmux, screenのセッションを検知するわけではなく、ssh-agentの起動状態からnew session, attachを判別しているため、不整合が起こる場合がある。
-
