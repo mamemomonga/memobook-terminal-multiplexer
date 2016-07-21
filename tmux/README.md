@@ -87,6 +87,10 @@ CTRL+B(C-b)
 
 [tmux のコピーモードを使ってみる](http://inokara.hateblo.jp/entry/2013/07/04/233051)
 
+## リモートのtmuxのコピーしたバッファを手元にコピーする
+
+	$ ssh user@hostname 'tmux save-buffer - ' | pbcopy
+
 ## tmux起動と同時に縦に分割して最初のペインに戻る
 
 	$ tmux new-session \; split-window -h \; select-pane -t :.0
