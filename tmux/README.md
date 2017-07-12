@@ -35,9 +35,10 @@ CTRL+B(C-b)
 
 内容                | コマンド
 --------------------|--------------------------
-ウィンドウ名 変更   | C-b + ,
+ウィンドウ 名前変更 | C-b + ,
 クライアント 一覧   | tmux lsc
 キー一覧            | C-b + ?
+設定ファイルの再ロード | C-b + :source-file ~/.tmux.conf
 
 内容                | コマンド
 --------------------|--------------------------
@@ -46,6 +47,9 @@ CTRL+B(C-b)
 セッション アタッチ | tmux a -t [セッション名]
 セッション アタッチ | tmux a
 セッション 確認     | tmux ls
+
+
+
 
 ## 他のペインを持ってくる
 
@@ -81,12 +85,6 @@ CTRL+B(C-b)
 コピー終了位置指定  | y
 コピーモード 終了	  | C-b ]	
 
-[達人に学ぶ.tmux.confの基本設定](http://qiita.com/succi0303/items/cb396704493476373edf)
-
-[tmuxでクリップボードにコピーする](http://qiita.com/c8112002/items/71361e347e430f9bb14e)
-
-[tmux のコピーモードを使ってみる](http://inokara.hateblo.jp/entry/2013/07/04/233051)
-
 ## リモートのtmuxのコピーしたバッファを手元にコピーする
 
 	$ ssh user@hostname 'tmux save-buffer - ' | pbcopy
@@ -95,13 +93,13 @@ CTRL+B(C-b)
 
 	$ tmux new-session \; split-window -h \; select-pane -t :.0
 
-# 設定ファイル
-
-[達人に学ぶ.tmux.confの基本設定](http://qiita.com/succi0303/items/cb396704493476373edf)
-
 # 参考URL
 
-[GNU Screen ライクなターミナルマルチプレクサ「tmux」を使う](http://d.hatena.ne.jp/eco31/20101126/1290725841)
+* [GNU Screen ライクなターミナルマルチプレクサ「tmux」を使う](http://d.hatena.ne.jp/eco31/20101126/1290725841)
+* [tmuxの基本的な使い方とコマンドのまとめ](http://www.task-notes.com/entry/20150711/1436583600)
+* [達人に学ぶ.tmux.confの基本設定](http://qiita.com/succi0303/items/cb396704493476373edf)
+* [tmuxでクリップボードにコピーする](http://qiita.com/c8112002/items/71361e347e430f9bb14e)
+* [tmux のコピーモードを使ってみる](http://inokara.hateblo.jp/entry/2013/07/04/233051)
+* [tmux の status line の設定方法](http://qiita.com/nojima/items/9bc576c922da3604a72b)
 
-[tmuxの基本的な使い方とコマンドのまとめ](http://www.task-notes.com/entry/20150711/1436583600)
 
