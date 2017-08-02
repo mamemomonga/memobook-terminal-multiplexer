@@ -68,8 +68,10 @@ CTRL+B(C-b)
 	# コピーモードを設定する
 	## viのキーバインドを使用する
 	setw -g mode-keys vi
+
 	## クリップボード共有を有効にする
 	set-option -g default-command "reattach-to-user-namespace -l zsh"
+
 	## コピーモードの操作をvi風に設定する
 	bind-key -t vi-copy v begin-selection
 	bind-key -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
@@ -92,6 +94,10 @@ CTRL+B(C-b)
 ## tmux起動と同時に縦に分割して最初のペインに戻る
 
 	$ tmux new-session \; split-window -h \; select-pane -t :.0
+
+## 新しいウィンドウにタイトルを設定してSSH接続
+
+	$ tmux new-window -n 'TITLE' 'exec ssh user@host'
 
 # 参考URL
 
